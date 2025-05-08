@@ -20,6 +20,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "d3-contour": "^4.0.2",
+    "d3-scale-chromatic": "^3.1.0",
     "lucide-react": "^0.508.0",
     "motion": "^12.10.4",
     "next": "14.2.28",
@@ -30,6 +31,7 @@
   },
   "devDependencies": {
     "@types/d3-contour": "^3.0.6",
+    "@types/d3-scale-chromatic": "^3.1.0",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

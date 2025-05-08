@@ -1,6 +1,11 @@
+"use client";
+
+import ParameterSpace from "@/components/charts/parameter-space";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
+import { objective } from "@/core/objective";
+import { ParentSize } from "@visx/responsive";
 
 export default function Home() {
   return (
@@ -22,8 +27,23 @@ export default function Home() {
             </div>
           </CardContent>
         </Card>
-        <Card className="flex-1">
-          <CardContent></CardContent>
+        <Card className="flex-1 w-full h-full">
+          <CardContent className="w-full h-full">
+            <ParentSize>
+              {({ width, height }) => {
+                if (width === 0 || height === 0) return;
+                return (
+                  <ParameterSpace
+                    width={width}
+                    height={height}
+                    objective={objective}
+                    xExtent={[10, 35]}
+                    yExtent={[-2, 6]}
+                  />
+                );
+              }}
+            </ParentSize>
+          </CardContent>
         </Card>
       </section>
       <section className="flex flex-col gap-2 h-full flex-1">

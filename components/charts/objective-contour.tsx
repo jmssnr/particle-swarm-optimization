@@ -1,23 +1,23 @@
 import { ObjectiveFunction } from "@/core/types";
-import { ScaleLinear, ScaleSequential } from "@visx/vendor/d3-scale";
-import { range } from "@visx/vendor/d3-array";
+import { ScaleLinear, scaleSequentialLog } from "@visx/vendor/d3-scale";
+import { range, extent } from "@visx/vendor/d3-array";
 import { contours } from "d3-contour";
 import { geoPath } from "@visx/vendor/d3-geo";
+import { interpolateYlGnBu } from "d3-scale-chromatic";
 
 const ObjectiveContour = (props: {
   xScale: ScaleLinear<number, number>;
   yScale: ScaleLinear<number, number>;
-  colorScale: ScaleSequential<string>;
   fun: ObjectiveFunction;
 }) => {
-  const { xScale, yScale, colorScale, fun } = props;
+  const { xScale, yScale, fun } = props;
 
   const innerWidth = xScale.range()[1];
   const innerHeight = yScale.range()[0];
 
   const quality = 2;
   const x0 = -quality / 2;
-  const x1 = innerWidth + quality;
+  const x1 = innerWidth + 28 + quality;
   const y0 = -quality / 2;
   const y1 = innerHeight + quality;
 
@@ -35,6 +35,11 @@ const ObjectiveContour = (props: {
   }
 
   const thresholds = range(1, 20).map((i) => Math.pow(2, i));
+
+  const colorScale = scaleSequentialLog(
+    extent(thresholds) as [number, number],
+    interpolateYlGnBu
+  );
 
   const contour = contours()
     .size([n, m])
