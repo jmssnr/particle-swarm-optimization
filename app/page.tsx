@@ -7,16 +7,16 @@ export default function Home() {
     <main className="w-screen h-screen flex gap-2 p-2">
       <section className="flex-1 flex flex-col gap-2">
         <Card>
-          <CardContent className="flex justify-evenly gap-2 p-4">
-            <div className="flex flex-col gap-2">
+          <CardContent className="flex justify-evenly gap-6 p-4">
+            <div className="flex flex-col gap-2 flex-1">
               <Label>Parameter 1</Label>
               <Slider />
             </div>
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 flex-1">
               <Label>Parameter 2</Label>
               <Slider />
             </div>
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 flex-1">
               <Label>Parameter 3</Label>
               <Slider />
             </div>
