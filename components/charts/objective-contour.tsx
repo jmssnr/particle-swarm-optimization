@@ -1,9 +1,67 @@
-import React from 'react'
+import { ObjectiveFunction } from "@/core/types";
+import { ScaleLinear, ScaleSequential } from "@visx/vendor/d3-scale";
+import { range } from "@visx/vendor/d3-array";
+import { contours } from "d3-contour";
+import { geoPath } from "@visx/vendor/d3-geo";
 
-const ObjectiveContour = () => {
-  return (
-    <div>ObjectiveContour</div>
-  )
-}
+const ObjectiveContour = (props: {
+  xScale: ScaleLinear<number, number>;
+  yScale: ScaleLinear<number, number>;
+  colorScale: ScaleSequential<string>;
+  fun: ObjectiveFunction;
+}) => {
+  const { xScale, yScale, colorScale, fun } = props;
 
-export default ObjectiveContour
+  const innerWidth = xScale.range()[1];
+  const innerHeight = yScale.range()[0];
+
+  const quality = 2;
+  const x0 = -quality / 2;
+  const x1 = innerWidth + quality;
+  const y0 = -quality / 2;
+  const y1 = innerHeight + quality;
+
+  const n = Math.ceil((x1 - x0) / quality);
+  const m = Math.ceil((y1 - y0) / quality);
+
+  const grid = new Array(n * m);
+  for (let j = 0; j < m; j++) {
+    for (let i = 0; i < n; i++) {
+      grid[i * n + i] = fun([
+        xScale.invert(i * quality + x0),
+        yScale.invert(j * quality + y0),
+      ]);
+    }
+  }
+
+  const thresholds = range(1, 20).map((i) => Math.pow(2, i));
+
+  const contour = contours()
+    .size([n, m])
+    .thresholds(thresholds)(grid)
+    .map(({ type, value, coordinates }) => {
+      return {
+        type,
+        value,
+        coordinates: coordinates.map((rings) =>
+          rings.map((points) =>
+            points.map((point) => [
+              -quality + quality * point[0],
+              -quality + quality * point[1],
+            ])
+          )
+        ),
+      };
+    });
+
+  return contour.map((line, i) => (
+    <path
+      key={`contour-line-${i}`}
+      d={geoPath()(line) || ""}
+      stroke={colorScale(line.value)}
+      fill="transparent"
+    />
+  ));
+};
+
+export default ObjectiveContour;
