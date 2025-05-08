@@ -1,5 +1,6 @@
 "use client";
 
+import ObjectiveIterationChart from "@/components/charts/objective-iteration-chart";
 import ParameterSpace from "@/components/charts/parameter-space";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
@@ -80,7 +81,13 @@ export default function Home() {
           <CardHeader>
             <CardTitle>Objective Function</CardTitle>
           </CardHeader>
-          <CardContent></CardContent>
+          <CardContent>
+            <ObjectiveIterationChart
+              width={600}
+              height={400}
+              parameters={result.map((d) => d.bestPosition)}
+            />
+          </CardContent>
         </Card>
         <Card className="flex-1">
           <CardHeader>
