@@ -6,7 +6,7 @@ import { uniformRandomSample } from "./uniform-random-sample";
 export const minimize = (
   w: number = 0.1,
   c1: number = 0.25,
-  c2: number = 2
+  c2: number = 1
 ) => {
   const initialPopulation: Particle[] = [];
   const maximumIterations = 10;

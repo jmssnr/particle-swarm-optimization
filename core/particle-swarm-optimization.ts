@@ -23,7 +23,10 @@ export const particleSwarmOptimization = (
   }
 
   const result: PSOResult = [
-    { particleTrajectories: population, bestPosition: xBest },
+    {
+      particleTrajectories: [...structuredClone(population)],
+      bestPosition: structuredClone(xBest),
+    },
   ];
 
   for (let k = 0; k < maxIterations; k++) {
@@ -32,7 +35,7 @@ export const particleSwarmOptimization = (
         const r1 = uniformRandomSample(0, 1);
         const r2 = uniformRandomSample(0, 1);
         population[i].position[j] += population[i].velocity[j];
-        population[j].velocity[j] =
+        population[i].velocity[j] =
           w * population[i].velocity[j] +
           c1 *
             r1 *
@@ -57,4 +60,6 @@ export const particleSwarmOptimization = (
       bestPosition: structuredClone(xBest),
     });
   }
+
+  return result;
 };

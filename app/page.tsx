@@ -4,10 +4,13 @@ import ParameterSpace from "@/components/charts/parameter-space";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
+import { minimize } from "@/core/minimize";
 import { objective } from "@/core/objective";
 import { ParentSize } from "@visx/responsive";
 
 export default function Home() {
+  const result = minimize();
+  console.log(result.map((r) => r.particleTrajectories));
   return (
     <main className="w-screen h-screen flex gap-2 p-2">
       <section className="flex-1 flex flex-col gap-2">
@@ -34,6 +37,9 @@ export default function Home() {
                 if (width === 0 || height === 0) return;
                 return (
                   <ParameterSpace
+                    particleTrajectories={result.map(
+                      (r) => r.particleTrajectories
+                    )}
                     width={width}
                     height={height}
                     objective={objective}
