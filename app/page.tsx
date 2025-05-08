@@ -18,7 +18,7 @@ export default function Home() {
 
   return (
     <main className="w-screen h-screen flex gap-2 p-2">
-      <section className="flex-1 flex flex-col gap-2">
+      <section className="flex-1 flex flex-col gap-2 h-full">
         <Card>
           <CardContent className="flex justify-evenly gap-6 p-4">
             <div className="flex flex-col gap-2 flex-1">
@@ -75,7 +75,7 @@ export default function Home() {
           </CardContent>
         </Card>
       </section>
-      <section className="flex flex-col gap-2 h-full flex-1">
+      <section className="flex flex-col gap-2 flex-1">
         <Card className="flex-1">
           <CardHeader>
             <CardTitle>Objective Function</CardTitle>
