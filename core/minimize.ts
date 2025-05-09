@@ -9,8 +9,8 @@ export const minimize = (
   c2: number = 1
 ) => {
   const initialPopulation: Particle[] = [];
-  const maximumIterations = 10;
-  for (let i = 0; i < 20; i++) {
+  const maximumIterations = 20;
+  for (let i = 0; i < 50; i++) {
     initialPopulation.push(
       new Particle(
         [uniformRandomSample(10, 35), uniformRandomSample(-2, 6)],

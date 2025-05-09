@@ -2,6 +2,7 @@
 
 import ObjectiveIterationChart from "@/components/charts/objective-iteration-chart";
 import ParameterSpace from "@/components/charts/parameter-space";
+import TimeSeriesChart from "@/components/charts/time-series-chart";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
@@ -83,8 +84,8 @@ export default function Home() {
           </CardHeader>
           <CardContent>
             <ObjectiveIterationChart
-              width={600}
-              height={400}
+              width={400}
+              height={300}
               parameters={result.map((d) => d.bestPosition)}
             />
           </CardContent>
@@ -93,7 +94,13 @@ export default function Home() {
           <CardHeader>
             <CardTitle>Optimized Model</CardTitle>
           </CardHeader>
-          <CardContent></CardContent>
+          <CardContent>
+            <TimeSeriesChart
+              width={400}
+              height={300}
+              parameters={result.map((d) => d.particleTrajectories)}
+            />
+          </CardContent>
         </Card>
       </section>
     </main>
