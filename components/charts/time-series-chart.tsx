@@ -9,15 +9,14 @@ import { scaleLinear } from "@visx/scale";
 import { LinePath } from "@visx/shape";
 import { range } from "@visx/vendor/d3-array";
 import { motion } from "motion/react";
-import { useEffect, useState } from "react";
 
 const TimeSeriesChart = (props: {
   width: number;
   height: number;
   parameters: Particle[][];
+  iteration: number;
 }) => {
-  const [iteration, setIteration] = useState(0);
-  const { width, height, parameters } = props;
+  const { width, height, parameters, iteration } = props;
 
   const innerWidth = width - MARGIN.left - MARGIN.right;
   const innerHeight = height - MARGIN.top - MARGIN.bottom;
@@ -41,16 +40,6 @@ const TimeSeriesChart = (props: {
       className="fill-chart-2"
     />
   ));
-
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      setIteration((previous) => (previous + 1) % parameters.length);
-    }, (5 / parameters.length) * 1000);
-
-    return () => clearInterval(intervalId);
-  }, []);
-
-  // const modelPrediction = model(parameters[iteration]);
 
   const modelPrediction = parameters[iteration].map((particle, index) => {
     const yModel = model(particle.position);

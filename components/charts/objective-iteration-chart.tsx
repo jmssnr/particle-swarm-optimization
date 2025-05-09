@@ -7,13 +7,15 @@ import { AxisBottom, AxisLeft } from "@visx/axis";
 import { Group } from "@visx/group";
 import { scaleLinear } from "@visx/scale";
 import { LinePath } from "@visx/shape";
+import { motion } from "motion/react";
 
 const ObjectiveIterationChart = (props: {
   width: number;
   height: number;
   parameters: Particle["position"][];
+  iteration: number;
 }) => {
-  const { width, height, parameters } = props;
+  const { width, height, parameters, iteration } = props;
 
   const innerWidth = width - MARGIN.left - MARGIN.right;
   const innerHeight = height - MARGIN.top - MARGIN.bottom;
@@ -30,12 +32,20 @@ const ObjectiveIterationChart = (props: {
 
   const objectiveLine = (
     <LinePath
-      data={parameters}
+      data={parameters.slice(0, iteration)}
       x={(d, i) => xScale(i)}
       y={(d) => yScale(objective(d))}
       className="stroke-chart-2"
-    />
+    >
+      {({ path }) => (
+        <motion.path
+          animate={{ d: path(parameters.slice(0, iteration)) || "" }}
+          className={"fill-transparent stroke-chart-1"}
+        />
+      )}
+    </LinePath>
   );
+
   return (
     <svg width={width} height={height}>
       <Group left={MARGIN.left} top={MARGIN.top}>

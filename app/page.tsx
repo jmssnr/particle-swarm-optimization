@@ -3,24 +3,30 @@
 import ObjectiveIterationChart from "@/components/charts/objective-iteration-chart";
 import ParameterSpace from "@/components/charts/parameter-space";
 import TimeSeriesChart from "@/components/charts/time-series-chart";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { minimize } from "@/core/minimize";
 import { objective } from "@/core/objective";
+import { useIteration } from "@/hooks/useIteration";
 import { ParentSize } from "@visx/responsive";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 export default function Home() {
+  const iteration = useIteration(15);
+
   const [inertiaWeight, setIntertiaWeight] = useState(0.1);
   const [cognitiveWeight, setCognitiveWeight] = useState(0.25);
   const [socialWeight, setSocialWeight] = useState(1);
 
-  const result = minimize(inertiaWeight, cognitiveWeight, socialWeight);
+  const result = useMemo(
+    () => minimize(inertiaWeight, cognitiveWeight, socialWeight),
+    [inertiaWeight, cognitiveWeight, socialWeight]
+  );
 
   return (
     <main className="w-screen h-screen flex gap-2 p-2">
-      <section className="flex-1 flex flex-col gap-2 h-full">
+      <section className="flex-1 flex flex-col gap-2 h-full min-h-0">
         <Card>
           <CardContent className="flex justify-evenly gap-6 p-4">
             <div className="flex flex-col gap-2 flex-1">
@@ -55,52 +61,51 @@ export default function Home() {
             </div>
           </CardContent>
         </Card>
-        <Card className="flex-1 w-full h-full">
-          <CardContent className="w-full h-full">
-            <ParentSize>
-              {({ width, height }) => {
-                if (width === 0 || height === 0) return;
-                return (
-                  <ParameterSpace
-                    particleTrajectories={result.map(
-                      (r) => r.particleTrajectories
-                    )}
-                    width={width}
-                    height={height}
-                    objective={objective}
-                    xExtent={[10, 35]}
-                    yExtent={[-2, 6]}
-                  />
-                );
-              }}
-            </ParentSize>
-          </CardContent>
+        <Card className="flex-1 w-full h-full p-5 min-h-0 min-w-0">
+          <ParentSize>
+            {({ width, height }) => {
+              if (width === 0 || height === 0) return;
+              return (
+                <ParameterSpace
+                  particleTrajectories={result.map(
+                    (r) => r.particleTrajectories
+                  )}
+                  width={width}
+                  height={height}
+                  objective={objective}
+                  xExtent={[10, 35]}
+                  yExtent={[-2, 6]}
+                  iteration={iteration}
+                />
+              );
+            }}
+          </ParentSize>
         </Card>
       </section>
-      <section className="flex flex-col gap-2 flex-1">
-        <Card className="flex-1">
-          <CardHeader>
-            <CardTitle>Objective Function</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ObjectiveIterationChart
-              width={400}
-              height={300}
-              parameters={result.map((d) => d.bestPosition)}
-            />
-          </CardContent>
+      <section className="flex flex-col gap-2 flex-1 min-h-0 min-w-0">
+        <Card className="flex-1 p-5 min-h-0 min-w-0">
+          <ParentSize>
+            {({ width, height }) => (
+              <ObjectiveIterationChart
+                width={width}
+                height={height}
+                parameters={result.map((d) => d.bestPosition)}
+                iteration={iteration}
+              />
+            )}
+          </ParentSize>
         </Card>
-        <Card className="flex-1">
-          <CardHeader>
-            <CardTitle>Optimized Model</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <TimeSeriesChart
-              width={400}
-              height={300}
-              parameters={result.map((d) => d.particleTrajectories)}
-            />
-          </CardContent>
+        <Card className="flex-1 p-5 min-h-0 min-w-0">
+          <ParentSize>
+            {({ width, height }) => (
+              <TimeSeriesChart
+                width={width}
+                height={height}
+                parameters={result.map((d) => d.particleTrajectories)}
+                iteration={iteration}
+              />
+            )}
+          </ParentSize>
         </Card>
       </section>
     </main>

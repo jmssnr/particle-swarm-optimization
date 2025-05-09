@@ -1,11 +1,10 @@
-import ParticleTrajectory from "@/components/charts/particle-trajectory";
 import { Particle } from "@/core/particle";
 import { ObjectiveFunction } from "@/core/types";
 import { Group } from "@visx/group";
 import { scaleLinear } from "@visx/scale";
+import { motion } from "motion/react";
 import { MARGIN } from "./margin";
 import ObjectiveContour from "./objective-contour";
-
 const ParameterSpace = (props: {
   width: number;
   height: number;
@@ -13,9 +12,17 @@ const ParameterSpace = (props: {
   xExtent: [number, number];
   yExtent: [number, number];
   particleTrajectories: Particle[][];
+  iteration: number;
 }) => {
-  const { width, height, xExtent, yExtent, objective, particleTrajectories } =
-    props;
+  const {
+    width,
+    height,
+    xExtent,
+    yExtent,
+    objective,
+    particleTrajectories,
+    iteration,
+  } = props;
 
   const innerWidth = width - MARGIN.left - MARGIN.right;
   const innerHeight = height - MARGIN.top - MARGIN.bottom;
@@ -30,14 +37,48 @@ const ParameterSpace = (props: {
     domain: yExtent,
   });
 
-  const individualParticleTrajectories = particleTrajectories[0].map(
-    (_, particleIdx) => (
-      <ParticleTrajectory
-        key={`particle-idx-${particleIdx}`}
-        data={particleTrajectories.map((h) => h[particleIdx])}
-        x={(d) => xScale(d.position[0])}
-        y={(d) => yScale(d.position[1])}
-      />
+  const animatedCircles = particleTrajectories[iteration].map(
+    (particle, index) => (
+      <Group key={`circle-${index}`}>
+        {particleTrajectories[iteration - 1] && (
+          <motion.line
+            animate={{
+              opacity: [0.5, 0],
+              pathLength: [0.5, 0.6],
+              x1: xScale(
+                particleTrajectories[iteration - 1][index].position[0]
+              ),
+              y1: yScale(
+                particleTrajectories[iteration - 1][index].position[1]
+              ),
+              x2: xScale(particleTrajectories[iteration][index].position[0]),
+              y2: yScale(particleTrajectories[iteration][index].position[1]),
+            }}
+            transition={{ type: "tween" }}
+            className="stroke-chart-1 fill-none opacity-25"
+          />
+        )}
+        <motion.circle
+          animate={{
+            cx: xScale(particle.position[0]),
+            cy: yScale(particle.position[1]),
+          }}
+          r={4}
+          transition={{ type: "tween" }}
+          className="fill-chart-1 opacity-70"
+        />
+        <motion.circle
+          initial={{ opacity: 0 }}
+          animate={{
+            cx: xScale(particle.position[0]),
+            cy: yScale(particle.position[1]),
+            opacity: 1,
+          }}
+          r={8}
+          transition={{ type: "tween" }}
+          className="fill-chart-1 opacity-20"
+        />
+      </Group>
     )
   );
 
@@ -45,7 +86,7 @@ const ParameterSpace = (props: {
     <svg width={width} height={height}>
       <Group left={MARGIN.left} top={MARGIN.top}>
         <ObjectiveContour xScale={xScale} yScale={yScale} fun={objective} />
-        {individualParticleTrajectories}
+        {animatedCircles}
       </Group>
     </svg>
   );
