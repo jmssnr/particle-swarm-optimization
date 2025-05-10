@@ -8,7 +8,7 @@ const HyperparameterControls = (props: {
   const { getHyperparameter, setHyperparameter } = props;
 
   const controls = [
-    { id: "inertia", label: "Intertia Weight" },
+    { id: "inertia", label: "Inertia Weight" },
     { id: "cognitive", label: "Cognitive Weight" },
     { id: "social", label: "Social Weight" },
   ].map((parameter) => (
