@@ -26,9 +26,9 @@ export default function Home() {
 
   return (
     <main className="w-screen h-screen flex gap-2 p-2">
-      <section className="flex-1 flex flex-col gap-2 h-full min-h-0">
-        <Card>
-          <CardContent className="flex justify-evenly gap-6 p-4">
+      <section className="flex-1 flex flex-col gap-2 h-full min-h-0 min-w-0">
+        <Card className="min-h-0 min-w-0">
+          <CardContent className="flex justify-evenly gap-6 p-4 min-h-0 min-w-0">
             <div className="flex flex-col gap-2 flex-1">
               <Label>Inertia Weight</Label>
               <Slider
