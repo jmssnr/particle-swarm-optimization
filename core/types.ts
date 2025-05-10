@@ -6,3 +6,8 @@ export type PSOResult = {
   particleTrajectories: Particle[];
   bestPosition: Particle["position"];
 }[];
+
+export type Hyperparameter = {
+  id: string,
+  value: number
+}
